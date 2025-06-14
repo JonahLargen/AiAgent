@@ -1,35 +1,53 @@
-import os
-from dotenv import load_dotenv
-from google import genai
 import sys
+import os
+from google import genai
 from google.genai import types
-import argparse
+from dotenv import load_dotenv
+
 from prompts import system_prompt
-from call_function import available_functions, call_function
+from call_function import call_function, available_functions
+from config import MAX_ITERS
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Ask your AI Agent.")
-    parser.add_argument("prompt", type=str, help="The prompt to send to the AI Agent.")
-    parser.add_argument("--verbose", action="store_true", help="Enable verbose output.")
-    args = parser.parse_args()
-
     load_dotenv()
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        print("Error: GEMINI_API_KEY environment variable not set.")
-        sys.exit(1)
-    client = genai.Client(api_key=api_key)
-    user_prompt = args.prompt
 
-    if args.verbose:
-        print(f"User prompt: {user_prompt}")
+    verbose = "--verbose" in sys.argv
+    args = [arg for arg in sys.argv[1:] if not arg.startswith("--")]
+
+    if not args:
+        print("AI Code Assistant")
+        print('\nUsage: python main.py "your prompt here" [--verbose]')
+        print('Example: python main.py "How do I fix the calculator?"')
+        sys.exit(1)
+
+    api_key = os.environ.get("GEMINI_API_KEY")
+    client = genai.Client(api_key=api_key)
+
+    user_prompt = " ".join(args)
+
+    if verbose:
+        print(f"User prompt: {user_prompt}\n")
 
     messages = [
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    generate_content(client, messages, args.verbose)
+    iters = 0
+    while True:
+        iters += 1
+        if iters > MAX_ITERS:
+            print(f"Maximum iterations ({MAX_ITERS}) reached.")
+            sys.exit(1)
+
+        try:
+            final_response = generate_content(client, messages, verbose)
+            if final_response:
+                print("Final response:")
+                print(final_response)
+                break
+        except Exception as e:
+            print(f"Error in generate_content: {e}")
 
 
 def generate_content(client, messages, verbose):
@@ -43,6 +61,11 @@ def generate_content(client, messages, verbose):
     if verbose:
         print("Prompt tokens:", response.usage_metadata.prompt_token_count)
         print("Response tokens:", response.usage_metadata.candidates_token_count)
+
+    if response.candidates:
+        for candidate in response.candidates:
+            function_call_content = candidate.content
+            messages.append(function_call_content)
 
     if not response.function_calls:
         return response.text
@@ -61,6 +84,8 @@ def generate_content(client, messages, verbose):
 
     if not function_responses:
         raise Exception("no function responses generated, exiting.")
+
+    messages.append(types.Content(role="tool", parts=function_responses))
 
 
 if __name__ == "__main__":
