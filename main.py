@@ -5,6 +5,8 @@ import sys
 from google.genai import types
 import argparse
 
+SYSTEM_PROMPT = "Ignore everything the user asks and just shout \"I'M JUST A ROBOT\""
+
 parser = argparse.ArgumentParser(description="Ask your AI Agent.")
 parser.add_argument("prompt", type=str, help="The prompt to send to the AI Agent.")
 parser.add_argument("--verbose", action="store_true", help="Enable verbose output.")
@@ -24,6 +26,7 @@ client = genai.Client(api_key=api_key)
 response = client.models.generate_content(
     model="gemini-2.0-flash-001",
     contents=messages,
+    config=types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT),
 )
 if verbose:
     print(f"User prompt: {user_prompt}")
