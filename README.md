@@ -1,6 +1,6 @@
 # Gemini Agentic AI Agent
 
-This AI agent is a python command line LLM-powered program capable of reading, writing, and updating code, similar to Claude Code, Cursor Agent or Github Copilot Extension. It operates by understanding user requests and translating them into a series of actions using Gemini's API. It acts directly on the codebase (hence the _agentic_) as opposed to a standard interactive command line LLM wrapper. It uses real feedback loops and context from prior requests in order to perform the request.
+This AI agent is a python command line LLM-powered program capable of reading, writing, and updating code, similar to Claude Code, Cursor Agent or Github Copilot Extension. It operates by understanding user requests and translating them into a series of actions using Gemini's API. It acts directly on the codebase (hence the _agentic_) as opposed to a standard interactive command line LLM wrapper. It uses real feedback loops and context from prior learning in order to perform the request.
 
 > [!WARNING]
 > This project is a toy and is for educational purposes only. Do not use in a production environment; take caution what directory you run this program in (it will have access to your file system, which includes overwriting files).
