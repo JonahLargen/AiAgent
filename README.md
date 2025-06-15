@@ -58,7 +58,7 @@ In calculator.py, change the precendece of the "+" operator from 1 to 3. This wi
 Prompt the agent to make the fix with an appropriate prompt.
 
 ```
-python3 main.py "Fix the bug in the calculator app. Whenever I do 3 + 7 * 2, it outputs 20. The answer should be 17.
+python3 main.py "Fix the bug in the calculator app. Whenever I do 3 + 7 * 2, it outputs 20. The answer should be 17."
 ```
 
 It will read the directory to find relevant files (get_files_info), then open them and read the text (get_file_context). Once it finds the bug, it will directly write to the file to edit it (write_file), and execute the main.py to ensure the output is correct (run_python_file).
