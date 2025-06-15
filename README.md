@@ -28,14 +28,20 @@ GEMINI_API_KEY="<YOUR_TOKEN_HERE>"
 ```
 
 For this demo, `gemini-2.0-flash-001` is used as it is cheap and has a serviceable free tier.
+
+2) Install Dependencies
+
+```
+pip install -r requirements.txt
+```
   
-2) Execute the main.py in the root
+3) Execute the main.py in the root
 
 ```
 python3 main.py "explain in a few sentences what this code base does"
 ```
 
-3) Run in verbose mode (optional) to see logs
+4) Run in verbose mode (optional) to see logs
 
 ```
 python3 main.py "explain in a few sentences what this code base does" --verbose
