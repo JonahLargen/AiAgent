@@ -138,4 +138,4 @@ Let's make the AI read all files then summarize the entire codebase.
 python3 main.py "generate a description of how the gemeni ai agent works, appropriate for the readme of the github project. please add some detail such as how it works, but dont include specific function names"
 ```
 
-For the answer, look at the top of this read me :)
+For the answer, look at the 'how it works' of this very read me :)
